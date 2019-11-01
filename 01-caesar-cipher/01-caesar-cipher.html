@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>01. Caesar Cipher</title>
+</head>
+<body>
+  <input class="js-input">
+
+  <div class="js-encrypted"></div>
+  <div class="js-decrypted"></div>
+
+  <script>
+    const $inputEle = document.querySelector('.js-input');
+    const $encryptedEle = document.querySelector('.js-encrypted');
+    const $decryptedEle = document.querySelector('.js-decrypted');
+
+    $inputEle.addEventListener('keyup', function() {
+      $encryptedEle.innerText = caesarCipher(this.value);
+      $decryptedEle.innerText = decryptCaesarCipher(this.value);
+    });
+
+    function caesarCipher(text) {
+      const sanitizedTextArray = getSanitizedTextArray(text);
+
+      const encodedArray = sanitizedTextArray.map(word => {
+        return word.split('').map(encodeLetter).join('');
+      });
+
+      return encodedArray.join(' ');
+    }
+
+    function encodeLetter(letter) {
+      const offset = 'a'.charCodeAt(0);
+      const charCode = letter.charCodeAt(0) - offset;
+      const nextCode = (charCode + 3) % 26;
+
+      return String.fromCharCode(nextCode + offset);
+    }
+
+    function getSanitizedTextArray(text) {
+      const regex = /[^a-zA-Z]/;
+
+      // sanitized string will be lowercased, alphabetical characters
+      return text.toLowerCase().trim().split(regex).filter(a => !!a);
+    }
+
+    function decryptCaesarCipher(text) {
+      const sanitizedTextArray = getSanitizedTextArray(text);
+
+      const decodedArray = sanitizedTextArray.map(word => {
+        return word.split('').map(decodeLetter).join('');
+      });
+
+      return decodedArray.join(' ');
+    }
+
+    function decodeLetter(letter) {
+      const offset = 'a'.charCodeAt(0);
+      const charCode = letter.charCodeAt(0) - offset;
+      const nextCode = (charCode - 3) % 26;
+
+      return String.fromCharCode(nextCode + offset);
+    }
+  </script>
+</body>
+</html>
