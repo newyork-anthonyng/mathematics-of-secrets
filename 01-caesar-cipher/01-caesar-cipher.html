@@ -7,10 +7,21 @@
   <title>01. Caesar Cipher</title>
 </head>
 <body>
+  <h1>Caesar cipher</h1>
+  <p>The Caesar cipher is a simple encryption technique.</p>
+  <p>A letter is replaced with another letter 3 places down the alphabet.</p>
+  <p>For example, 'a' would be replaced with 'd'. 'd' would be replaced with 'g'.</p>
   <input class="js-input">
 
-  <div class="js-encrypted"></div>
-  <div class="js-decrypted"></div>
+  <div>
+    <span>Encrypted text:</span>
+    <span class="js-encrypted"></span>
+  </div>
+
+  <div>
+    <span>Decrypted text:</span>
+    <span class="js-decrypted"></span>
+  </div>
 
   <script>
     const $inputEle = document.querySelector('.js-input');
@@ -60,7 +71,10 @@
     function decodeLetter(letter) {
       const offset = 'a'.charCodeAt(0);
       const charCode = letter.charCodeAt(0) - offset;
-      const nextCode = (charCode - 3) % 26;
+      let nextCode = charCode - 3;
+      if (nextCode < 0) {
+        nextCode += 26;
+      }
 
       return String.fromCharCode(nextCode + offset);
     }

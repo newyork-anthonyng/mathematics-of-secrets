@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>02. Shift Cipher</title>
+</head>
+<body>
+  <h1>Shift cipher</h1>
+  <p>In a shift cipher, you can specify different places down the alphabet to use for your encryption.</p>
+  <p>For example, when the position is 4, 'a' would be replaced with 'e'.</p>
+  <p>When the position is 5, 'a' would be replaced with 'f'.</p>
+  <p>The Caesar cipher is a shift cipher with the position set at 3.</p>
+
+  <input class="js-input">
+
+  <div class="js-encrypted"></div>
+
+  <script>
+    const $inputEle = document.querySelector('.js-input');
+    const $encryptedEle = document.querySelector('.js-encrypted');
+
+    $inputEle.addEventListener('keyup', function() {
+      const text = this.value;
+
+      let cipher = [];
+      for (let i = 0; i <= 26; i++) {
+        const encryptedText = shiftCipher(text, i);
+
+        const encryptedTextHtml = `
+          <li>${i} position: ${encryptedText}</li>
+        `;
+
+        cipher.push(encryptedTextHtml);
+      }
+
+      $encryptedEle.innerHTML = `<ul>${cipher.join('')}</ul>`;
+    });
+
+    function shiftCipher(text, position) {
+      const sanitizedTextArray = getSanitizedTextArray(text);
+
+      const encodedArray = sanitizedTextArray.map(word => {
+        return word.split('').map(encodeLetter(position)).join('');
+      });
+
+      return encodedArray.join(' ');
+    }
+
+    const encodeLetter = position => letter => {
+      const offset = 'a'.charCodeAt(0);
+      const charCode = letter.charCodeAt(0) - offset;
+      const nextCode = (charCode + position) % 26;
+
+      return String.fromCharCode(nextCode + offset);
+    }
+
+    function getSanitizedTextArray(text) {
+      const regex = /[^a-zA-Z]/;
+
+      // sanitized string will be lowercased, alphabetical characters
+      return text.toLowerCase().trim().split(regex).filter(a => !!a);
+    }
+  </script>
+</body>
+</html>
